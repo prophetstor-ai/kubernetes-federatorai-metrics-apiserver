@@ -1,11 +1,17 @@
-FROM golang:1.12 as builder
+FROM golang:1.10
 WORKDIR /go/src/github.com/draios/kubernetes-sysdig-metrics-apiserver
-COPY go.mod go.sum ./
+
+RUN go get github.com/golang/dep/cmd/dep
+COPY Gopkg.toml Gopkg.lock ./
+RUN dep ensure -v -vendor-only
+
+COPY vendor vendor
 COPY cmd cmd
 COPY internal internal
-RUN GO111MODULE=on CGO_ENABLED=0 GOOS=linux go install -ldflags="-w -s" -v github.com/draios/kubernetes-sysdig-metrics-apiserver/cmd/adapter
+RUN CGO_ENABLED=0 GOOS=linux go install -ldflags="-w -s" -v github.com/draios/kubernetes-sysdig-metrics-apiserver/cmd/adapter
 
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
-COPY --from=builder /go/bin/adapter /bin/adapter
+COPY --from=0 /go/bin/adapter /bin/adapter
 CMD ["/bin/adapter"]
+

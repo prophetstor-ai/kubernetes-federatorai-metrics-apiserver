@@ -2,14 +2,6 @@
 
 
 [[projects]]
-  branch = "default"
-  digest = "1:db5c4e7a9516334fb1e9d5951fb9943d0f13e4f415a77c22b97e60f4d10a62a7"
-  name = "bitbucket.org/ww/goautoneg"
-  packages = ["."]
-  pruneopts = ""
-  revision = "75cd24fc2f2c2a2088577d12123ddee5f54e0675"
-
-[[projects]]
   digest = "1:b0fe84bcee1d0c3579d855029ccd3a76deea187412da2976985e4946289dbb2c"
   name = "github.com/NYTimes/gziphandler"
   packages = ["."]
@@ -341,7 +333,6 @@
   name = "github.com/prometheus/common"
   packages = [
     "expfmt",
-    "internal/bitbucket.org/ww/goautoneg",
     "model",
   ]
   pruneopts = ""

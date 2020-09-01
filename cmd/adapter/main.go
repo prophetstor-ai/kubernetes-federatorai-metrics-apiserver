@@ -18,6 +18,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 
 	"github.com/draios/kubernetes-sysdig-metrics-apiserver/internal/cmprovider"
+	"github.com/draios/kubernetes-sysdig-metrics-apiserver/internal/emprovider"
 	"github.com/draios/kubernetes-sysdig-metrics-apiserver/internal/sdc"
 
 	// TODO: Vendor this
@@ -155,7 +156,7 @@ func (o adapterOpts) runCustomMetricsAdapterServer(stopCh <-chan struct{}) error
 		// CustomMetricsProvider.
 		cmprovider.NewSysdigProvider(dynamicMapper, clientPool, sysdigClient, o.SysdigRequestTimeout, o.UpdateInterval, stopCh),
 		// ExternalMetricsProvider (which we're not implementing)
-		nil,
+		emprovider.NewSysdigProvider(dynamicMapper, clientPool, sysdigClient, o.SysdigRequestTimeout, o.UpdateInterval, stopCh),
 	)
 	if err != nil {
 		return err

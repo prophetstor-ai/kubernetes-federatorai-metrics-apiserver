@@ -47,3 +47,14 @@ func NewMetricNotFoundForError(resource schema.GroupResource, metricName string,
 		Message: fmt.Sprintf("the server could not find the metric %s for %s %s", metricName, resource.String(), resourceName),
 	}}
 }
+
+// NewMetricNotFoundError returns a StatusError indicating the given metric could not be found.
+// It is similar to NewNotFound, but more specialized
+func NewExternalMetricNotFoundError(metricName string) *apierr.StatusError {
+	return &apierr.StatusError{ErrStatus: metav1.Status{
+		Status:  metav1.StatusFailure,
+		Code:    int32(http.StatusNotFound),
+		Reason:  metav1.StatusReasonNotFound,
+		Message: fmt.Sprintf("the server could not find the metric %s", metricName),
+	}}
+}
