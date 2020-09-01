@@ -1,0 +1,23 @@
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: kuard-autoscaler
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: kuard
+  minReplicas: 3
+  maxReplicas: 10
+  # For a full list of metrics supported run:
+  #   $ kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1" | jq -r ".resources[].name"
+  metrics:
+  - type: Object
+    object:
+      target:
+        kind: Service
+        name: kuard
+      metricName: net.http.request.count
+      targetValue: 100
