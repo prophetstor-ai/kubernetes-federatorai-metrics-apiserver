@@ -3,6 +3,8 @@ package emprovider
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -63,6 +65,8 @@ func (p *sysdigProvider) LabelsSelectorToMap(metricSelector labels.Selector) map
 }
 
 func (p *sysdigProvider) GetExternalMetric(namespace string, metricName string, metricSelector labels.Selector) (*external_metrics.ExternalMetricValueList, error) {
+	log.SetOutput(os.Stderr)
+	log.SetFlags(0)
 
 	matchingMetrics := []external_metrics.ExternalMetricValue{}
 	mapLabels := p.LabelsSelectorToMap(metricSelector)
@@ -76,10 +80,13 @@ func (p *sysdigProvider) GetExternalMetric(namespace string, metricName string, 
 	}
 
 	req = req.
-		WithMetric(metricName, &sdc.MetricAggregation{Group: "avg", Time: "timeAvg"}).
+		//WithMetric(metricName, &sdc.MetricAggregation{Group: "avg", Time: "timeAvg"}).
+		WithMetric(metricName, nil).
 		WithFilter(strings.Join(filterArr, " and "))
+	log.Printf("GetExternalMetrics with req:%+v", req)
 	payload, _, err := p.sysdigClient.Data.Get(ctx, req)
 	if err != nil {
+		log.Printf("Error occurred when get data, err: %v", err)
 		return &external_metrics.ExternalMetricValueList{
 			Items: matchingMetrics,
 		}, fmt.Errorf("sysdig client error: %v", err)

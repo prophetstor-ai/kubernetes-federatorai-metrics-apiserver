@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
+	"os"
 )
 
 const (
@@ -126,6 +128,10 @@ func (c *Client) NewRequest(ctx context.Context, method, urlStr string, body int
 	}
 
 	req, err := http.NewRequest(method, u.String(), buf)
+	log.SetOutput(os.Stderr)
+	log.SetFlags(0)
+	log.Printf("Send NewRequest, method: %+v", req)
+	log.Printf("Send NewRequest detail, method: %s, url: %s, buf: %s", method, u.String(), buf.String())
 	if err != nil {
 		return nil, err
 	}

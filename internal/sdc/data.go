@@ -24,8 +24,8 @@ type DataServiceOp struct {
 var _ DataService = &DataServiceOp{}
 
 type Metric struct {
-	ID           string            `json:"id"`
-	Aggregations MetricAggregation `json:"aggregations,omitempty"`
+	ID           string             `json:"id"`
+	Aggregations *MetricAggregation `json:"aggregations,omitempty"`
 }
 
 type MetricAggregation struct {
@@ -34,22 +34,22 @@ type MetricAggregation struct {
 }
 
 type GetDataRequest struct {
-	Metrics        []Metric `json:"metrics"`
-	DataSourceType string   `json:"dataSourceType,omitempty"`
-	Start          int      `json:"start,omitempty"`
-	End            int      `json:"end,omitempty"`
-	Last           int      `json:"last,omitempty"`
-	Filter         string   `json:"filter,omitempty"`
-	Paging         string   `json:"paging,omitempty"`
-	Sampling       int      `json:"sampling,omitempty"`
+	Metrics        []*Metric `json:"metrics,omitempty"`
+	DataSourceType string    `json:"dataSourceType,omitempty"`
+	Start          int       `json:"start,omitempty"`
+	End            int       `json:"end,omitempty"`
+	Last           int       `json:"last,omitempty"`
+	Filter         string    `json:"filter,omitempty"`
+	Paging         string    `json:"paging,omitempty"`
+	Sampling       int       `json:"sampling,omitempty"`
 }
 
 func (gdr *GetDataRequest) WithMetric(id string, aggregation *MetricAggregation) *GetDataRequest {
-	m := &Metric{ID: id}
-	if aggregation != nil {
-		m.Aggregations = *aggregation
+	m := &Metric{
+		ID:           id,
+		Aggregations: aggregation,
 	}
-	gdr.Metrics = append(gdr.Metrics, *m)
+	gdr.Metrics = append(gdr.Metrics, m)
 	return gdr
 }
 
