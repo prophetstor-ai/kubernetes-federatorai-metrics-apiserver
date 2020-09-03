@@ -1,6 +1,13 @@
 # First you need to create a secret using the CLI, with: 
 # kubectl create secret generic --from-literal access-key=<YOUR_SYSDIG_API_TOKEN> -n custom-metrics sysdig-api
-
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sysdig-api
+  namespace: custom-metrics
+type: Opaque
+data:
+  access-key: <YOUR_SYSDIG_API_TOKEN_IN_BASE64_ENCODE>
 ---
 apiVersion: apps/v1
 kind: Deployment

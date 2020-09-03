@@ -1,0 +1,24 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: kafka-external-autoscaler
+  namespace: myproject
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: consumer1-topic0001-group-0001
+  minReplicas: 1
+  maxReplicas: 40
+  # For a full list of metrics supported run:
+  #   $ kubectl get --raw "/apis/custom.metrics.k8s.io/v1beta1" | jq -r ".resources[].name"
+  metrics:
+  - type: External
+    external:
+      metricName: "federatorai_recommendation"
+      metricSelector:
+        matchLabels:
+          kube_cluster: a82470be-f56c-4099-8bfa-723a42aec7a2
+          kube_namespace: myproject
+          kube_deployment: consumer1-topic0001-group-0001
+      targetAverageValue: 1
