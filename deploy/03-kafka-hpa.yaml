@@ -18,6 +18,7 @@ spec:
       metricName: "federatorai_recommendation"
       metricSelector:
         matchLabels:
+          resource: replicas
           kubernetes_cluster_name: a82470be-f56c-4099-8bfa-723a42aec7a2
           kubernetes_namespace_name: myproject
           kubernetes_deployment_name: consumer1-topic0001-group-0001
