@@ -40,7 +40,7 @@ spec:
           secretName: sysdig-api
       containers:
       - name: custom-metrics-server
-        image: sysdiglabs/kubernetes-sysdig-metrics-apiserver:latest
+        image: sysdiglabs/kubernetes-sysdig-metrics-apiserver:prophetstor-revised-1.0.0
         imagePullPolicy: IfNotPresent
         command: ["adapter"]
         args:

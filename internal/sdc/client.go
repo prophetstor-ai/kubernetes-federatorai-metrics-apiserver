@@ -59,11 +59,15 @@ type ErrorResponse struct {
 
 // NewClient returns a new Sysdig Monitor API client.
 func NewClient(httpClient *http.Client, token string) *Client {
+	sysdigURL := defaultBaseURL
+	if url := os.Getenv("SDC_ENDPOINT"); url != "" {
+		sysdigURL = url
+	}
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
 
-	baseURL, _ := url.Parse(defaultBaseURL)
+	baseURL, _ := url.Parse(sysdigURL)
 
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent, Token: token}
 	c.Data = &DataServiceOp{client: c}
